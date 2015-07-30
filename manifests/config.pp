@@ -211,6 +211,37 @@ class contrail::config (
   $log_local                  = 1,
 ){
 
+  ##Check the version of contrail and assign correct service names
+  # This may need to be removed after the contrail upgrade and stablization 
+  # as this is only required because we are moving from upstart to supervisor
+  # for contrail
+  if $::contrail_config_version {
+    if $::contrail_config_version == '2.1' {
+      $contrail_api_service       ='supervisor-config'
+      $contrail_schema_service    ='supervisor-config'
+      $contrail_discovery_service ='supervisor-config'
+      $contrail_svc_service       ='supervisor-config'
+      create_resource('file','/etc/init/contrail-api.conf',{ensure => absent})
+      create_resource('file','/etc/init/contrail-schema.conf',{ensure => absent})
+      create_resource('file','/etc/init/contrail-discovery.conf',{ensure => absent})
+      create_resource('file','/etc/init/contrail-svc-monitor.conf',{ensure => absent})
+    }
+    else
+    {
+      $contrail_api_service       ='contrail-api'
+      $contrail_schema_service    ='contrail-schema'
+      $contrail_discovery_service ='contrail-discovery'
+      $contrail_svc_service       ='contrail-svc-monitor'
+    }
+  }
+  else
+  {
+      $contrail_api_service       ='contrail-api'
+      $contrail_schema_service    ='contrail-schema'
+      $contrail_discovery_service ='contrail-discovery'
+      $contrail_svc_service       ='contrail-svc-monitor'
+  }
+
   ##
   ## If ifmap uses certificate authentication, connect to secure port
   ##
@@ -295,7 +326,7 @@ class contrail::config (
   }
 
 
-  service {'contrail-api':
+  service {$contrail_api_service:
     ensure    => 'running',
     enable    => true,
     subscribe => [ File['/etc/contrail/contrail-api.conf'],
@@ -308,7 +339,7 @@ class contrail::config (
     require => Package[$package_name]
   }
 
-  service {'contrail-schema':
+  service {$contrail_schema_service:
     ensure    => 'running',
     enable    => true,
     subscribe => File['/etc/contrail/contrail-schema.conf'],
@@ -342,7 +373,7 @@ class contrail::config (
     require => Package[$package_name]
   }
 
-  service {'contrail-discovery':
+  service {$contrail_discovery_service:
     ensure    => 'running',
     enable    => true,
     subscribe => File['/etc/contrail/contrail-discovery.conf'],
@@ -357,7 +388,7 @@ class contrail::config (
     ensure         => present,
     host_address   => $contrail_ip,
     admin_password => $keystone_admin_password,
-    require        => Service['contrail-api'],
+    require        => Service[$contrail_api_service],
   }
 
 
@@ -368,7 +399,7 @@ class contrail::config (
     $defaults = {
       admin_password => $keystone_admin_password,
       ensure         => present,
-      require        => Service['contrail-api']
+      require        => Service[$contrail_api_service]
     }
     create_resources(contrail_router,$edge_routers,$defaults)
 
@@ -383,7 +414,7 @@ class contrail::config (
       admin_password           => $keystone_admin_password,
       service_address          => '169.254.169.254',
       service_port             => 80,
-      require                  => Service['contrail-api'],
+      require                  => Service[$contrail_api_service],
     }
   }
 }

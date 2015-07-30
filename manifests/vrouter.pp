@@ -95,13 +95,32 @@ class contrail::vrouter (
   validate_bool($lbaas)
   validate_bool($manage_repo)
 
+  ##Check the version of contrail and assign correct service names
+  # This may need to be removed after the contrail upgrade and stablization 
+  # as this is only required because we are moving from upstart to supervisor
+  # for contrail
+  if $::contrail_vrouter_version {
+    if $::contrail_vrouter_version == '2.1' {
+      $contrail_vrouter_agent   ='supervisor-vrouter'
+      create_resource('file','/etc/init/contrail-vrouter-agent.conf',{ensure => absent})
+    }
+    else
+    {
+      $contrail_vrouter_agent   ='contrail-vrouter-agent'
+    }
+  }
+  else
+  {
+      $contrail_vrouter_agent   ='contrail-vrouter-agent'
+  }
+
+
   ##
   # restart contrail-vrouter-agent on changing vrouter configuration
   ##
 
   Package['contrail-vrouter-agent'] -> Contrail_vrouter_config<||>
-
-  Contrail_vrouter_config<||> ~> Service['contrail-vrouter-agent']
+  Contrail_vrouter_config<||> ~> Service[$contrail_vrouter_agent]
 
   ##
   #  Setup repo if enabled.
@@ -238,7 +257,7 @@ class contrail::vrouter (
     mode    => '0644',
     content => template('contrail/agent_param.erb'),
     require => Package['contrail-vrouter-agent'],
-    notify  => Service['contrail-vrouter-agent'],
+    notify  => Service[$contrail_vrouter_agent],
   }
 
   ##
@@ -256,7 +275,7 @@ class contrail::vrouter (
       mode    => '0644',
       content => template('contrail/agent.conf.erb'),
       require => Package['contrail-vrouter-agent'],
-      notify  => Service['contrail-vrouter-agent'],
+      notify  => Service[$contrail_vrouter_agent],
     }
 
     file { '/etc/contrail/default_pmac':
@@ -266,7 +285,7 @@ class contrail::vrouter (
       mode    => '0644',
       content => $vrouter_mac,
       require => Package['contrail-vrouter-agent'],
-      notify  => Service['contrail-vrouter-agent'],
+      notify  => Service[$contrail_vrouter_agent],
     }
 
     contrail_vrouter_config {
@@ -299,7 +318,7 @@ class contrail::vrouter (
     mode    => '0644',
     content => "DISCOVERY=${discovery_ip}\n",
     require => Package['contrail-vrouter-agent'],
-    notify  => Service['contrail-vrouter-agent'],
+    notify  => Service[$contrail_vrouter_agent],
   }
 
   file { '/var/crash':
@@ -312,7 +331,7 @@ class contrail::vrouter (
   sysctl::value { 'kernel.core_pattern': value => '/var/crash/core.%e.%p.%h.%t' }
   sysctl::value { 'net.ipv4.ip_forward': value => 1 }
 
-  service { 'contrail-vrouter-agent':
+  service { $contrail_vrouter_agent:
     ensure     => running,
     enable     => true,
     hasstatus  => true,
@@ -328,7 +347,7 @@ class contrail::vrouter (
     host_address       => $vrouter_ip,
     admin_password     => $keystone_admin_password,
     api_server_address => $api_address_orig,
-    require            => Service['contrail-vrouter-agent'],
+    require            => Service[$contrail_vrouter_agent],
   }
 
   ##

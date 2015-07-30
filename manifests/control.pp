@@ -11,6 +11,30 @@ class contrail::control (
   $log_local       = 1,
 ) {
 
+  ##Check the version of contrail and assign correct service names
+  # This may need to be removed after the contrail upgrade and stablization 
+  # as this is only required because we are moving from upstart to supervisor
+  # for contrail
+  if $::contrail_control_version {
+    if $::contrail_control_version == '2.1' {
+      $contrail_control_service   ='supervisor-control'
+      $contrail_dns_service       ='supervisor-control'
+      create_resource('file','/etc/init/contrail-control.conf',{ensure => absent})
+      create_resource('file','/etc/init/contrail-dns.conf',{ensure => absent})
+    }
+    else
+    {
+      $contrail_control_service   ='contrail-control'
+      $contrail_dns_service       ='contrail-dns'
+    }
+  }
+  else
+  {
+      $contrail_control_service   ='contrail-control'
+      $contrail_dns_service       ='contrail-dns'
+  }
+
+
   package {'contrail-control':
     ensure => $package_ensure,
   }
@@ -28,7 +52,7 @@ class contrail::control (
     content => template("${module_name}/dns.conf.erb"),
   }
 
-  service {'contrail-dns':
+  service {$contrail_dns_service:
     ensure    => running,
     enable    => true,
     subscribe => File['/etc/contrail/dns.conf'],
@@ -44,7 +68,7 @@ class contrail::control (
     content => template("${module_name}/contrail-control.conf.erb"),
   }
 
-  service {'contrail-control':
+  service {$contrail_control_service:
     ensure    => running,
     enable    => true,
     subscribe => File['/etc/contrail/contrail-control.conf'],
