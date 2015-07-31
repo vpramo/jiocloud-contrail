@@ -563,10 +563,10 @@ class contrail (
 
   if $enable_control {
     class {'contrail::control':
-      control_ip_list          => $control_ip_list_orig,
-      config_ip                => $config_ip_orig,
-      contrail_ip              => $contrail_ip,
-      contrail_control_daemon  => $contrail_control_daemon,
+      control_ip_list             => $control_ip_list_orig,
+      config_ip                   => $config_ip_orig,
+      contrail_ip                 => $contrail_ip,
+      contrail_control_daemon     => $contrail_control_daemon,
     }
 
     Anchor['contrail::end_base_services'] ->
