@@ -222,6 +222,8 @@ class contrail (
   $keystone_admin_token,
   $keystone_admin_password,
   $keystone_auth_password,
+  $contrail_config_daemon      = 'upstart',
+  $contrail_control_daemon     = 'upstart',
   $edge_routers                = {},
   $nova_metadata_address       = undef,
   $nova_metadata_port          = 8775,
@@ -316,6 +318,7 @@ class contrail (
   validate_re($hc_interval, '\d+')
   validate_re($router_asn, '\d+')
   validate_re($nova_metadata_port, '\d+')
+  validate_string($contrail_config_daemon)
   validate_string($keystone_address)
   validate_string($glance_address)
   validate_string($cinder_address)
@@ -546,6 +549,7 @@ class contrail (
       edge_routers                => $edge_routers,
       contrail_ip                 => $contrail_ip,
       seed                        => $seed,
+      contrail_config_daemon      => $contrail_config_daemon,
     }
 
     Anchor['contrail::end_base_services'] ->
@@ -559,9 +563,10 @@ class contrail (
 
   if $enable_control {
     class {'contrail::control':
-      control_ip_list => $control_ip_list_orig,
-      config_ip       => $config_ip_orig,
-      contrail_ip     => $contrail_ip,
+      control_ip_list          => $control_ip_list_orig,
+      config_ip                => $config_ip_orig,
+      contrail_ip              => $contrail_ip,
+      contrail_control_daemon  => $contrail_control_daemon,
     }
 
     Anchor['contrail::end_base_services'] ->

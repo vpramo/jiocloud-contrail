@@ -63,6 +63,7 @@
 class contrail::vrouter (
   $discovery_address,
   $keystone_admin_password,
+  $contrail_vrouter_daemon    = 'upstart',
   $api_address                = undef,
   $api_port                   = 8082,
   $package_names              = [ 'contrail-vrouter-agent','contrail-utils',
@@ -99,8 +100,8 @@ class contrail::vrouter (
   # This may need to be removed after the contrail upgrade and stablization 
   # as this is only required because we are moving from upstart to supervisor
   # for contrail
-  if $::contrail_vrouter_version {
-    if $::contrail_vrouter_version == '2.1' {
+  if $contrail_vrouter_daemon {
+    if $contrail_vrouter_daemon == 'supervisor' {
       $contrail_vrouter_agent   ='supervisor-vrouter'
       create_resource('file','/etc/init/contrail-vrouter-agent.conf',{ensure => absent})
     }

@@ -159,6 +159,7 @@ class contrail::config (
   $keystone_admin_token,
   $keystone_admin_password,
   $keystone_auth_password,
+  $contrail_config_daemon     = 'upstart',
   $edge_routers               = {},
   $keystone_host              = $::ipaddress,
   $nova_metadata_address      = $::ipaddress,
@@ -215,8 +216,8 @@ class contrail::config (
   # This may need to be removed after the contrail upgrade and stablization 
   # as this is only required because we are moving from upstart to supervisor
   # for contrail
-  if $::contrail_config_version {
-    if $::contrail_config_version == '2.1' {
+  if $contrail_config_daemon {
+    if $contrail_config_daemon == 'supervisor' {
       $contrail_api_service       ='supervisor-config'
       $contrail_schema_service    ='supervisor-config'
       $contrail_discovery_service ='supervisor-config'
