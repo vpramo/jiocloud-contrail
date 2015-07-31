@@ -222,10 +222,18 @@ class contrail::config (
       $contrail_schema_service    ='supervisor-config'
       $contrail_discovery_service ='supervisor-config'
       $contrail_svc_service       ='supervisor-config'
-      create_resource('file','/etc/init/contrail-api.conf',{ensure => absent})
-      create_resource('file','/etc/init/contrail-schema.conf',{ensure => absent})
-      create_resource('file','/etc/init/contrail-discovery.conf',{ensure => absent})
-      create_resource('file','/etc/init/contrail-svc-monitor.conf',{ensure => absent})
+      file { '/etc/init/contrail-api.conf' :
+        ensure  => absent,
+      }
+      file { '/etc/init/contrail-schema.conf' :
+        ensure  => absent,
+      }
+      file { '/etc/init/contrail-discovery.conf' :
+        ensure  => absent,
+      }
+      file { '/etc/init/contrail-svc-monitor.conf' :
+        ensure  => absent,
+      }
     }
     else
     {

@@ -20,8 +20,12 @@ class contrail::control (
     if $contrail_control_daemon == 'supervisor' {
       $contrail_control_service   ='supervisor-control'
       $contrail_dns_service       ='supervisor-control'
-      create_resource('file','/etc/init/contrail-control.conf',{ensure => absent})
-      create_resource('file','/etc/init/contrail-dns.conf',{ensure => absent})
+      file { '/etc/init/contrail-control.conf' :
+        ensure  => absent,
+      }
+      file { '/etc/init/contrail-dns.conf' :
+        ensure  => absent,
+      }
     }
     else
     {

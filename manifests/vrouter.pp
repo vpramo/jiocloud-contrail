@@ -103,7 +103,9 @@ class contrail::vrouter (
   if $contrail_vrouter_daemon {
     if $contrail_vrouter_daemon == 'supervisor' {
       $contrail_vrouter_agent   ='supervisor-vrouter'
-      create_resource('file','/etc/init/contrail-vrouter-agent.conf',{ensure => absent})
+      file { '/etc/init/contrail-vrouter-agent.conf' :
+        ensure  => absent,
+      }
     }
     else
     {
