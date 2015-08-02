@@ -216,39 +216,42 @@ class contrail::config (
   # This may need to be removed after the contrail upgrade and stablization 
   # as this is only required because we are moving from upstart to supervisor
   # for contrail
-  if $contrail_config_daemon {
-    if $contrail_config_daemon == 'supervisor' {
-      $contrail_api_service       ='supervisor-config'
-      $contrail_schema_service    ='supervisor-config'
-      $contrail_discovery_service ='supervisor-config'
-      $contrail_svc_service       ='supervisor-config'
-      file { '/etc/init/contrail-api.conf' :
-        ensure  => absent,
-      }
-      file { '/etc/init/contrail-schema.conf' :
-        ensure  => absent,
-      }
-      file { '/etc/init/contrail-discovery.conf' :
-        ensure  => absent,
-      }
-      file { '/etc/init/contrail-svc-monitor.conf' :
-        ensure  => absent,
-      }
+  if $contrail_config_daemon == 'supervisor' {
+    file { '/etc/init/contrail-api.conf' :
+      ensure  => absent,
     }
-    else
-    {
-      $contrail_api_service       ='contrail-api'
-      $contrail_schema_service    ='contrail-schema'
-      $contrail_discovery_service ='contrail-discovery'
-      $contrail_svc_service       ='contrail-svc-monitor'
+    file { '/etc/init/contrail-schema.conf' :
+      ensure  => absent,
+    }
+    file { '/etc/init/contrail-discovery.conf' :
+      ensure  => absent,
+    }
+    file { '/etc/init/contrail-svc-monitor.conf' :
+      ensure  => absent,
+    }
+    service {'contrail-api':
+      name      => 'supervisor-config',
+      ensure    => 'running',
+      hasstatus => true,
+      enable    => true,
+      subscribe => [ File['/etc/contrail/contrail-api.conf'],
+                File['/etc/contrail/vnc_api_lib.ini'],
+                File['/etc/contrail/contrail-discovery.conf'] ],
     }
   }
   else
   {
-      $contrail_api_service       ='contrail-api'
-      $contrail_schema_service    ='contrail-schema'
-      $contrail_discovery_service ='contrail-discovery'
-      $contrail_svc_service       ='contrail-svc-monitor'
+    service {'contrail-api':
+      ensure    => 'running',
+      enable    => true,
+      subscribe => [ File['/etc/contrail/contrail-api.conf'],
+                  File['/etc/contrail/vnc_api_lib.ini'] ],
+    }
+    service {'contrail-discovery':
+      ensure    => 'running',
+      enable    => true,
+      subscribe => File['/etc/contrail/contrail-discovery.conf'],
+    }
   }
 
   ##
@@ -335,20 +338,13 @@ class contrail::config (
   }
 
 
-  service {$contrail_api_service:
-    ensure    => 'running',
-    enable    => true,
-    subscribe => [ File['/etc/contrail/contrail-api.conf'],
-                  File['/etc/contrail/vnc_api_lib.ini'] ],
-  }
-
   file {'/etc/contrail/contrail-schema.conf':
     ensure  => present,
     content => template("${module_name}/contrail-schema.conf.erb"),
     require => Package[$package_name]
   }
 
-  service {$contrail_schema_service:
+  service {'contrail-schema':
     ensure    => 'running',
     enable    => true,
     subscribe => File['/etc/contrail/contrail-schema.conf'],
@@ -382,12 +378,6 @@ class contrail::config (
     require => Package[$package_name]
   }
 
-  service {$contrail_discovery_service:
-    ensure    => 'running',
-    enable    => true,
-    subscribe => File['/etc/contrail/contrail-discovery.conf'],
-  }
-
   ##
   # Provision control nodes - Add bgp entries in config database for
   # contrail control node.
@@ -397,7 +387,7 @@ class contrail::config (
     ensure         => present,
     host_address   => $contrail_ip,
     admin_password => $keystone_admin_password,
-    require        => Service[$contrail_api_service],
+    require        => Service['contrail-api'],
   }
 
 
@@ -408,7 +398,7 @@ class contrail::config (
     $defaults = {
       admin_password => $keystone_admin_password,
       ensure         => present,
-      require        => Service[$contrail_api_service]
+      require        => Service['contrail-api']
     }
     create_resources(contrail_router,$edge_routers,$defaults)
 
@@ -423,7 +413,7 @@ class contrail::config (
       admin_password           => $keystone_admin_password,
       service_address          => '169.254.169.254',
       service_port             => 80,
-      require                  => Service[$contrail_api_service],
+      require                  => Service['contrail-api'],
     }
   }
 }

@@ -18,8 +18,6 @@ class contrail::control (
   # for contrail
   if $contrail_control_daemon {
     if $contrail_control_daemon == 'supervisor' {
-      $contrail_control_service   ='supervisor-control'
-      $contrail_dns_service       ='supervisor-control'
       file { '/etc/init/contrail-control.conf' :
         ensure  => absent,
       }
@@ -27,16 +25,6 @@ class contrail::control (
         ensure  => absent,
       }
     }
-    else
-    {
-      $contrail_control_service   ='contrail-control'
-      $contrail_dns_service       ='contrail-dns'
-    }
-  }
-  else
-  {
-      $contrail_control_service   ='contrail-control'
-      $contrail_dns_service       ='contrail-dns'
   }
 
 
@@ -57,7 +45,7 @@ class contrail::control (
     content => template("${module_name}/dns.conf.erb"),
   }
 
-  service {$contrail_dns_service:
+  service {'contrail-dns':
     ensure    => running,
     enable    => true,
     subscribe => File['/etc/contrail/dns.conf'],
@@ -73,7 +61,7 @@ class contrail::control (
     content => template("${module_name}/contrail-control.conf.erb"),
   }
 
-  service {$contrail_control_service:
+  service {'contrail-control':
     ensure    => running,
     enable    => true,
     subscribe => File['/etc/contrail/contrail-control.conf'],
