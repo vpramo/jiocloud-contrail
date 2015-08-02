@@ -230,8 +230,8 @@ class contrail::config (
       ensure  => absent,
     }
     service {'contrail-api':
-      name      => 'supervisor-config',
       ensure    => 'running',
+      name      => 'supervisor-config',
       hasstatus => true,
       enable    => true,
       subscribe => [ File['/etc/contrail/contrail-api.conf'],
