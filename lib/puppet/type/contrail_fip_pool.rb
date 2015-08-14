@@ -47,6 +47,31 @@ If you use neutron apis, the floating IP pool will be shared with all tenants.
     end
   end
 
+  newparam(:admin_user) do
+    desc 'Openstack Admin User'
+    defaultto 'admin'
+    munge do |v|
+      v.strip
+    end
+  end
+
+  newparam(:admin_password) do
+    desc 'Openstack Admin Password'
+    defaultto 'Chang3M3'
+    munge do |v|
+      v.strip
+    end
+  end
+
+  newparam(:admin_tenant) do
+    desc 'Openstack Admin Tenant'
+    defaultto 'openstack'
+    munge do |v|
+      v.strip
+    end
+  end
+
+
   newproperty(:tenants, :array_matching => :all) do
     desc 'An array of project fqnames which will have access to this fip pool'
     def insync?(is)
