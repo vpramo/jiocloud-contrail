@@ -31,7 +31,7 @@ describe 'contrail::webui' do
       should contain_apt__pin('nodejs_for_contrail_webui').with({
         'priority' => 1001,
         'packages' => 'nodejs',
-        'version'  => '0.8*'
+        'version'  => '*contrail1'
       })
     end
   end
