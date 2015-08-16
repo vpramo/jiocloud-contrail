@@ -55,7 +55,7 @@ describe 'contrail::control' do
       should contain_service('contrail-named').with({
         'ensure'    => 'running',
         'enable'    => true,
-        'subscribe' => '[File[/etc/contrail/dns/contrail-named.conf]{:path=>"/etc/contrail/dns/contrail-named.conf"}, File[/etc/contrail/supervisord_control_files/contrail-named.ini]{:path=>"/etc/contrail/supervisord_control_files/contrail-named.ini"}]',
+        'subscribe' => '[File[/etc/contrail/dns/contrail-named.conf]{:path=>"/etc/contrail/dns/named.conf"}, File[/etc/contrail/supervisord_control_files/contrail-named.ini]{:path=>"/etc/contrail/supervisord_control_files/contrail-named.ini"}]',
         'require'   => 'Package[contrail-dns]'
       })
     end

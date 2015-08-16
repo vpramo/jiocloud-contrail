@@ -36,7 +36,7 @@ class contrail::control (
 
     file { '/etc/contrail/supervisord_control_files/contrail-named.ini' :
       ensure => present,
-      source => "${module_name}/contrail-named.ini"
+      source => "puppet:///modules/${module_name}/contrail-named.ini"
     }
 
     file { '/etc/contrail/dns/named.conf' :
@@ -47,7 +47,7 @@ class contrail::control (
     service {'contrail-named':
       ensure    => running,
       enable    => true,
-      subscribe => [ File['/etc/contrail/dns/contrail-named.conf'],
+      subscribe => [ File['/etc/contrail/dns/named.conf'],
                 File['/etc/contrail/supervisord_control_files/contrail-named.ini'] ],
       require   => Package['contrail-dns']
     }
