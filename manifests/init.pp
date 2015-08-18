@@ -121,7 +121,8 @@
 #  Default: 5
 #
 # [*manage_repo*]
-#  Whether to manage opencontrail (apt) repo or not.
+#  Currently there are two repo's for contrail, this says whether we need to use the existing
+#  repo or the new repo created for contrailv2.
 #
 # [*enable_svcmon*]
 #   Whether to enable svcmon or not. This service is only required if you are

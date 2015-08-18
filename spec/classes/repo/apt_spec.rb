@@ -9,12 +9,11 @@ describe 'contrail::repo::apt' do
 
   context 'with defaults' do
     it do
-      should contain_apt__source('opencontrail').with({
-        'location'  => 'http://ppa.launchpad.net/opencontrail/ppa/ubuntu',
+      should contain_apt__source('contrailv2').with({
+        'location'  => 'http://jiocloud.rustedhalo.com/contrailv2/',
         'release'   => 'trusty',
         'repos'     => 'main',
         'include_src'=> false,
-        'key'       => '6839FE77',
       })
     end
   end
