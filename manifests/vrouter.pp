@@ -187,7 +187,7 @@ class contrail::vrouter (
     method  => 'manual',
     options => {
                 'pre-down' => 'ifconfig $IFACE down',
-                'pre-up'   => "ifconfig \$IFACE mtu ${network_mtu} up; /usr/local/bin/if-vhost0 || true"
+                'pre-up'   => "ifconfig \$IFACE mtu ${network_mtu} up; modprobe vrouter; /usr/local/bin/if-vhost0 || true"
                 },
     onboot  => true,
   } ->
@@ -201,7 +201,7 @@ class contrail::vrouter (
     method  => 'dhcp',
     onboot  => true,
     options => {
-                'pre-up' => '/usr/local/bin/if-vhost0',
+                'pre-up' => 'modprobe vrouter ; /usr/local/bin/if-vhost0',
                 },
   } ->
   exec { "ifup_${vrouter_interface}":
