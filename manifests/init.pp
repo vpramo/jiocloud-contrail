@@ -202,6 +202,14 @@
 #  Enable ifmap, defaults to true. Ifmap is not required to be setup in case of
 #  a separate node which is only running contrail analytics.
 #
+# [*enable_dns*] 
+#  Enable contrail dns service , defaults to false. Contrail dns service can be placed on a
+#  seperate node
+#
+#
+# [*dns_port]
+#  The port on which contrail-named service listens, by default this is set to 10000
+#
 # === Examples
 #
 #  class {'::contrail':
@@ -282,6 +290,8 @@ class contrail (
   $enable_control              = true,
   $enable_webui                = true,
   $enable_ifmap                = true,
+  $enable_dns                  = false,
+  $dns_port                    = '10000'
 ) {
 
   ##
@@ -562,6 +572,8 @@ class contrail (
       control_ip_list => $control_ip_list_orig,
       config_ip       => $config_ip_orig,
       contrail_ip     => $contrail_ip,
+      enable_dns      => $enable_dns,
+      dns_port        => $dns_port
     }
 
     Anchor['contrail::end_base_services'] ->
