@@ -166,6 +166,18 @@ class contrail::vrouter (
   package { 'ufw':
     ensure  => absent,
   }
+  
+  ##
+  # Due to a bug in vrouter on virtualbox, the following patch is required 
+  # It can be removed once the issue has been fixed
+  ##
+  if ($::virtual == 'virtualbox') {
+    $vrouter_patch='modprobe vrouter;'
+  }
+  else
+  {
+    $vrouter_patch=''
+  }
 
   ensure_resource(package, "linux-headers-${::kernelrelease}")
 
@@ -187,7 +199,7 @@ class contrail::vrouter (
     method  => 'manual',
     options => {
                 'pre-down' => 'ifconfig $IFACE down',
-                'pre-up'   => "ifconfig \$IFACE mtu ${network_mtu} up; /usr/local/bin/if-vhost0 || true"
+                'pre-up'   => "ifconfig \$IFACE mtu ${network_mtu} up;${vrouter_patch} /usr/local/bin/if-vhost0 || true"
                 },
     onboot  => true,
   } ->
@@ -201,7 +213,7 @@ class contrail::vrouter (
     method  => 'dhcp',
     onboot  => true,
     options => {
-                'pre-up' => '/usr/local/bin/if-vhost0',
+                'pre-up' => "${vrouter_patch}/usr/local/bin/if-vhost0",
                 },
   } ->
   exec { "ifup_${vrouter_interface}":
