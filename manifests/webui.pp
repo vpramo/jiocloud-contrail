@@ -45,13 +45,13 @@ class contrail::webui (
   }
 
   ##
-  # Contrail webui need older version of (0.8.x) nodejs.
+  # Contrail webui need a specific version of >= (0.8-contrail1) nodejs.
   # So pinning it on contrail node.
   ##
   apt::pin {'nodejs_for_contrail_webui':
     priority => 1001,
     packages => 'nodejs',
-    version  => '0.8*'
+    version  => '*contrail1'
   }
 
   Apt::Pin<||> -> Package<||>
