@@ -210,6 +210,13 @@
 # [*dns_port]
 #  The port on which contrail-named service listens, by default this is set to 10000
 #
+# [*api_virtual_ip]
+#  In a multinode setup, this will point to the Haproxy endpoint of the Contrail API, by default
+#  it will be the localhost
+# 
+# [*discovery_virtual_ip]
+#  In a multinode setup, this will point to the Haproxy endpoint of the Contrail discovery service, by default
+#  it will be the localhost
 # === Examples
 #
 #  class {'::contrail':
@@ -223,7 +230,7 @@
 # === Authors
 #
 # Harish Kumar <hkumar@d4devops.org>
-#
+# Pramod Venkatesh <vpramo@gmail.com>
 #
 
 class contrail (
@@ -236,6 +243,8 @@ class contrail (
   $interface                   = 'eth0',
   $keystone_region             = 'RegionOne',
   $manage_repo                 = false,
+  $api_virtual_ip              = '127.0.0.1',
+  $discovery_virtual_ip        = '127.0.0.1',
   $control_ip_list             = [],
   $config_package_name         = 'contrail-config-openstack',
   $package_ensure              = 'present',
@@ -353,6 +362,8 @@ class contrail (
   validate_string($api_listen)
   validate_string($memcache_servers)
   validate_hash($edge_routers)
+  validate_string($api_virtual_ip)
+  validate_string($discovery_virtual_ip)
 
   ##
   # Declaring anchors
@@ -537,6 +548,7 @@ class contrail (
       config_ip                   => $config_ip_orig,
       use_certs                   => $use_certs,
       cassandra_ip_list           => $cassandra_ip_list_orig,
+      api_virtual_ip              => $api_virtual_ip,
       api_listen                  => $api_listen,
       api_local_listen_port       => $api_local_listen_port,
       api_server_port             => $api_server_port,
@@ -547,6 +559,7 @@ class contrail (
       rabbit_ip                   => $rabbit_ip_orig,
       rabbit_user                 => $rabbit_user,
       rabbit_password             => $rabbit_password,
+      discovery_virtual_ip        => $discovery_virtual_ip,
       discovery_listen            => $discovery_listen,
       discovery_local_listen_port => $discovery_local_listen_port,
       discovery_server_port       => $discovery_server_port,
@@ -571,6 +584,7 @@ class contrail (
     class {'contrail::control':
       control_ip_list => $control_ip_list_orig,
       config_ip       => $config_ip_orig,
+      api_virtual_ip  => $api_virtual_ip,
       contrail_ip     => $contrail_ip,
       enable_dns      => $enable_dns,
       dns_port        => $dns_port
@@ -589,6 +603,7 @@ class contrail (
       contrail_ip        => $contrail_ip,
       collector_ip       => $collector_ip_orig,
       config_ip          => $config_ip_orig,
+      api_virtual_ip     => $api_virtual_ip,
       analytics_data_ttl => $analytics_data_ttl,
       cassandra_ip_list  => $cassandra_ip_list_orig,
       redis_ip           => $redis_ip_orig,
@@ -606,6 +621,7 @@ class contrail (
   if $enable_webui {
     class {'contrail::webui':
       package_ensure     => $package_ensure,
+      api_virtual_ip     => $api_virtual_ip,
       contrail_ip        => $contrail_ip,
       webui_ip           => $webui_ip_orig,
       config_ip          => $config_ip_orig,
