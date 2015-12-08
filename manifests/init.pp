@@ -622,6 +622,7 @@ class contrail (
     class {'contrail::webui':
       package_ensure     => $package_ensure,
       api_virtual_ip     => $api_virtual_ip,
+      discovery_virtual_ip => $discovery_virtual_ip,
       contrail_ip        => $contrail_ip,
       webui_ip           => $webui_ip_orig,
       config_ip          => $config_ip_orig,

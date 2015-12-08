@@ -8,6 +8,8 @@
 #
 class contrail::collector (
   $package_ensure     = 'present',
+  $api_virtual_ip     = '127.0.0.1',
+  $discovery_virtual_ip = '127.0.0.1',
   $contrail_ip        = $::ipaddress,
   $collector_ip       = $::ipaddress,
   $config_ip          = $::ipaddress,
