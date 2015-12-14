@@ -585,6 +585,7 @@ class contrail (
       control_ip_list => $control_ip_list_orig,
       config_ip       => $config_ip_orig,
       api_virtual_ip  => $api_virtual_ip,
+      discovery_virtual_ip => $discovery_virtual_ip,
       contrail_ip     => $contrail_ip,
       enable_dns      => $enable_dns,
       dns_port        => $dns_port

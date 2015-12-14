@@ -359,7 +359,7 @@ class contrail::config (
     ensure         => present,
     host_address   => $contrail_ip,
     admin_password => $keystone_admin_password,
-    api_server_ip  => $api_virtual_ip,
+    api_server_address  => $api_virtual_ip,
     require        => Service['contrail-api'],
   }
 
@@ -370,7 +370,7 @@ class contrail::config (
     ##
     $defaults = {
       admin_password => $keystone_admin_password,
-      api_server_ip  => $api_virtual_ip,
+      api_server_address  => $api_virtual_ip,
       ensure         => present,
       require        => Service['contrail-api']
     }
@@ -383,7 +383,7 @@ class contrail::config (
     contrail_linklocal {'metadata':
       ensure                   => present,
       ipfabric_service_address => $nova_metadata_address,
-      api_server_ip            => $api_virtual_ip,
+      api_server_address            => $api_virtual_ip,
       ipfabric_service_port    => $nova_metadata_port,
       admin_password           => $keystone_admin_password,
       service_address          => '169.254.169.254',
