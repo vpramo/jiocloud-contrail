@@ -295,6 +295,7 @@ class contrail::vrouter (
       'VIRTUAL-HOST-INTERFACE/ip':                  value => "${vrouter_ip}/${vrouter_cidr}";
       'VIRTUAL-HOST-INTERFACE/gateway':             value => $vrouter_gw_orig;
       'VIRTUAL-HOST-INTERFACE/physical_interface':  value => $vrouter_physical_interface;
+      'VIRUTAL-HOST-INTERFACE/compute_node_address':value => $vrouter_ip;
     }
 
     if $metadata_proxy_secret {
