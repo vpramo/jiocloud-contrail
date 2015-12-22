@@ -71,6 +71,7 @@ class contrail::vrouter (
   $manage_repo                = false,
   $vrouter_interface          = 'vhost0',
   $vrouter_physical_interface = 'eth0',
+  $interface_is_dhcp          = 'true',
   $vrouter_num_controllers    = 2,
   $vrouter_gw                 = undef,
   $metadata_proxy_secret      = 'set',
@@ -207,19 +208,45 @@ class contrail::vrouter (
     unless => "/sbin/ifconfig | grep ^${vrouter_physical_interface}",
   }
 
-  network_config { $vrouter_interface:
-    ensure  => present,
-    family  => 'inet',
-    method  => 'dhcp',
-    onboot  => true,
-    options => {
-                'pre-up' => "${vrouter_patch}/usr/local/bin/if-vhost0",
-                },
-  } ->
-  exec { "ifup_${vrouter_interface}":
-    command => "/sbin/ifup ${vrouter_interface}",
-    unless  => "/sbin/ifconfig | grep ^${vrouter_interface}",
-    require => Package[$package_names],
+  if $interface_is_dhcp {
+    network_config { $vrouter_interface:
+      ensure  => present,
+      family  => 'inet',
+      method  => 'dhcp',
+      onboot  => true,
+      options => {
+                  'pre-up' => "${vrouter_patch}/usr/local/bin/if-vhost0",
+                  },
+    } ->
+    exec { "ifup_${vrouter_interface}":
+      command => "/sbin/ifup ${vrouter_interface}",
+      unless  => "/sbin/ifconfig | grep ^${vrouter_interface}",
+      require => Package[$package_names],
+  }
+  else {
+    network_config { $vrouter_interface:
+      ensure  => present,
+      family  => 'inet',
+      method  => 'static',
+      ipaddress => $vrouter_ip,
+      netmask  => $vrouter_netmask,
+      onboot  => true,
+      options => {
+                  'pre-up' => "${vrouter_patch}/usr/local/bin/if-vhost0",
+                  },
+    } ->
+    network_route { 'default':
+      ensure => present,
+      gateway => $vrouter_gw,
+      interface => $vrouter_interface,
+      netmask => '0.0.0.0',
+      network => ' default',
+    } ->
+    exec { "ifup_${vrouter_interface}":
+      command => "/sbin/ifup ${vrouter_interface}",
+      unless  => "/sbin/ifconfig | grep ^${vrouter_interface}",
+      require => Package[$package_names],
+    }
   }
 
   # NOTE: below scripts are taken from contrail-vrouter-init package. It may
