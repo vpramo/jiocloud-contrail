@@ -239,7 +239,7 @@ class contrail::vrouter (
     } ->
     network_route { 'default':
       ensure => present,
-      gateway => $vrouter_gw,
+      gateway => $vrouter_gw_orig,
       interface => $vrouter_interface,
       netmask => '0.0.0.0',
       network => 'default',
