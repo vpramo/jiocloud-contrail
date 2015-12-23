@@ -242,7 +242,7 @@ class contrail::vrouter (
       gateway => $vrouter_gw,
       interface => $vrouter_interface,
       netmask => '0.0.0.0',
-      network => ' default',
+      network => 'default',
       require => Package['ifupdown-extra']
     } ->
     exec { "ifup_${vrouter_interface}":
