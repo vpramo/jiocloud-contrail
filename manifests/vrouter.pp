@@ -222,8 +222,10 @@ class contrail::vrouter (
       command => "/sbin/ifup ${vrouter_interface}",
       unless  => "/sbin/ifconfig | grep ^${vrouter_interface}",
       require => Package[$package_names],
+    }
   }
   else {
+    package {'ifupdown-extra':}
     network_config { $vrouter_interface:
       ensure  => present,
       family  => 'inet',
@@ -241,6 +243,7 @@ class contrail::vrouter (
       interface => $vrouter_interface,
       netmask => '0.0.0.0',
       network => ' default',
+      require => Package['ifupdown-extra']
     } ->
     exec { "ifup_${vrouter_interface}":
       command => "/sbin/ifup ${vrouter_interface}",
