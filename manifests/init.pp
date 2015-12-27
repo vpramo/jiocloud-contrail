@@ -603,14 +603,15 @@ class contrail (
   ##
   if $enable_analytics {
     class {'contrail::collector':
-      contrail_ip        => $contrail_ip,
-      collector_ip       => $collector_ip_orig,
-      config_ip          => $config_ip_orig,
-      api_virtual_ip     => $api_virtual_ip,
-      analytics_data_ttl => $analytics_data_ttl,
-      cassandra_ip_list  => $cassandra_ip_list_orig,
-      redis_ip           => $redis_ip_orig,
-      cassandra_port     => $cassandra_port,
+      contrail_ip          => $contrail_ip,
+      collector_ip         => $collector_ip_orig,
+      config_ip            => $config_ip_orig,
+      api_virtual_ip       => $api_virtual_ip,
+      discovery_virtual_ip => $discovery_virtual_ip,
+      analytics_data_ttl   => $analytics_data_ttl,
+      cassandra_ip_list    => $cassandra_ip_list_orig,
+      redis_ip             => $redis_ip_orig,
+      cassandra_port       => $cassandra_port,
     }
 
     Anchor['contrail::end_base_services'] ->
