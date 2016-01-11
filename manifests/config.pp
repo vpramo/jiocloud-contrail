@@ -389,7 +389,6 @@ class contrail::config (
       ipfabric_service_address => $nova_metadata_address,
       api_server_address            => $api_virtual_ip,
       ipfabric_service_port    => $nova_metadata_port,
-      admin_tenant             => $keystone_admin_tenant,
       admin_user               => $keystone_admin_user,
       admin_password           => $keystone_admin_password,
       service_address          => '169.254.169.254',
