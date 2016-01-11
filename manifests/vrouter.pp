@@ -62,6 +62,8 @@
 
 class contrail::vrouter (
   $discovery_address,
+  $keystone_admin_tenant,
+  $keystone_admin_user,
   $keystone_admin_password,
   $api_address                = undef,
   $api_port                   = 8082,
@@ -369,6 +371,8 @@ class contrail::vrouter (
   contrail_vrouter {$::hostname:
     ensure             => present,
     host_address       => $vrouter_ip,
+    admin_tenant       => $keystone_admin_tenant,
+    admin_user         => $keystone_admin_user,
     admin_password     => $keystone_admin_password,
     api_server_address => $api_address_orig,
     require            => Service['contrail-vrouter-agent'],
