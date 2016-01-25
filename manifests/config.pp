@@ -159,6 +159,7 @@ class contrail::config (
   $keystone_admin_token,
   $keystone_admin_password,
   $keystone_auth_password,
+  $keystone_auth_url,
   $edge_routers               = {},
   $keystone_host              = $::ipaddress,
   $nova_metadata_address      = $::ipaddress,
