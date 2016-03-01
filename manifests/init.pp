@@ -238,7 +238,7 @@ class contrail (
   $keystone_admin_password,
   $keystone_auth_password,
   $keystone_admin_user,
-  $keystone_auth_url,
+  $keystone_auth_url           = undef,
   $edge_routers                = {},
   $nova_metadata_address       = undef,
   $nova_metadata_port          = 8775,
