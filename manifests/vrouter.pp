@@ -174,7 +174,7 @@ class contrail::vrouter (
   # Due to a bug in vrouter on virtualbox, the following patch is required 
   # It can be removed once the issue has been fixed
   ##
-  if (::is_virtual == 'true') {
+  if ($::is_virtual == 'true') {
     $vrouter_patch='modprobe vrouter;'
   }
   else
