@@ -187,11 +187,7 @@ class contrail::vrouter (
     $vrouter_patch=''
   }
 
-  ##
-  # If Primary physical interface is not found then try to assign backup physical interface"
-  ##
-  if ($::
-
+  
   ensure_resource(package, "linux-headers-${::kernelrelease}")
 
   Package["linux-headers-${::kernelrelease}"] -> Package['contrail-vrouter-dkms']
