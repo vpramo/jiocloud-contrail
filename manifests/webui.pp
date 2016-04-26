@@ -15,18 +15,19 @@ class contrail::webui (
   $config_ip          = $::ipaddress,
   $neutron_port       = 9696,
   $neutron_protocol   = http,
+  $neutron_ca         = undef,
   $glance_address     = $::ipaddress,
   $glance_port        = 9292,
   $glance_protocol    = http,
-
+  $glance_ca          = undef,
   $nova_address       = $::ipaddress,
   $nova_port          = 8774,
   $nova_protocol      = http,
-
+  $nova_ca            = undef,
   $keystone_address   = $::ipaddress,
   $keystone_port      = 5000,
   $keystone_protocol  = http,
-
+  $keystone_ca        = undef,
   $cinder_address     = $::ipaddress,
   $cinder_port        = 8776,
   $cinder_protocol    = http,
@@ -35,10 +36,6 @@ class contrail::webui (
   $cassandra_ip_list  = [$::ipaddress],
   $redis_ip           = $::ipaddress,
   $cassandra_port     = 9160,
-  $glance_address     = $::ipaddress,
-  $nova_address       = $::ipaddress,
-  $keystone_address   = $::ipaddress,
-  $cinder_address     = $::ipaddress,
   $collector_ip       = $::ipaddress,
 ) {
 

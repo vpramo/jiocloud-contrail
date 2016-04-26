@@ -78,7 +78,7 @@ config.networkManager.port = '<%= @neutron_port %>'
 config.networkManager.authProtocol = '<%= @neutron_protocol %>';
 config.networkManager.apiVersion = [];
 config.networkManager.strictSSL = false;
-config.networkManager.ca = '';
+config.networkManager.ca = '<%= @neutron_ca %>';
 
 config.imageManager = {};
 config.imageManager.ip = '<%= @glance_address %>';
@@ -86,7 +86,7 @@ config.imageManager.port = '<%= @glance_port %>';
 config.imageManager.authProtocol = '<%= @glance_protocol %>';
 config.imageManager.apiVersion = ['v1', 'v2'];
 config.imageManager.strictSSL = false;
-config.imageManager.ca = '';
+config.imageManager.ca = '<%= @glance_ca %>';
 
 config.computeManager = {};
 config.computeManager.ip = '<%= @nova_address %>';
@@ -94,7 +94,7 @@ config.computeManager.port = '<%= @nova_port %>';
 config.computeManager.authProtocol = '<%= @nova_protocol %>';
 config.computeManager.apiVersion = ['v1.1', 'v2'];
 config.computeManager.strictSSL = false;
-config.computeManager.ca = '';
+config.computeManager.ca = '<%= @nova_ca %>';
 
 config.identityManager = {};
 config.identityManager.ip = '<%= @keystone_address %>';
@@ -109,7 +109,7 @@ config.identityManager.authProtocol = '<%= @keystone_protocol %>';
 ******************************************************************************/
 config.identityManager.apiVersion = ['v2.0'];
 config.identityManager.strictSSL = false;
-config.identityManager.ca = '';
+config.identityManager.ca = '<%= @keystone_ca %>';
 
 config.storageManager = {};
 config.storageManager.ip = '<%= @cinder_address %>';
