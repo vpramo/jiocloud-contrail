@@ -323,7 +323,7 @@ class contrail::config (
   # svcmon need python-six >= 1.7
   ##
   if $enable_svcmon {
-    file {'/etc/contrail/svc-monitor.conf':
+    file {'/etc/contrail/contrail-svc-monitor.conf':
       ensure  => present,
       content => template("${module_name}/svc-monitor.conf.erb"),
       require => Package[$package_name]
@@ -334,7 +334,7 @@ class contrail::config (
     service {'contrail-svc-monitor':
       ensure    => 'running',
       enable    => true,
-      subscribe => File['/etc/contrail/svc-monitor.conf'],
+      subscribe => File['/etc/contrail/contrail-svc-monitor.conf'],
       require   => [Package[$package_name],Package['python-six']],
     }
   }
