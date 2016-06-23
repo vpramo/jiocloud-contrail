@@ -80,6 +80,7 @@ class contrail::vrouter (
   $metadata_proxy_secret      = 'set',
   $router_address             = undef,
   $network_mtu                = 1500,
+  $headless_mode              = false,
   $hypervisor_type            = 'kvm',
   $vgw_enabled                = false,
   $vgw_interface              = 'vgw1',
@@ -325,6 +326,7 @@ class contrail::vrouter (
       'DEFAULT/log_local':                          value => $log_local;
       'DEFAULT/log_file_size':                      value => $log_file_size;
       'DEFAULT/debug':                              value => bool2num($debug);
+      'DEFAULT/headless_mode':                      value => $headless_mode;
       'DISCOVERY/server':                           value => $discovery_ip;
       'DISCOVERY/max_control_nodes':                value => $vrouter_num_controllers;
       'HYPERVISOR/type':                            value => $hypervisor_type;
