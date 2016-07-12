@@ -121,6 +121,12 @@ class contrail::vrouter (
     Apt::Source<||> -> Package<||>
   }
 
+  if has_interface_with($vrouter_physical_interface_backup) {
+    $vrouter_physical_interface_orig = $vrouter_physical_interface_backup
+  } elsif has_interface_with($vrouter_physical_interface) {
+    $vrouter_physical_interface_orig = $vrouter_physical_interface
+  }
+
   if has_interface_with($vrouter_interface) {
     $iface_for_vrouter_config = $vrouter_interface
   } elsif has_interface_with($vrouter_physical_interface) {
