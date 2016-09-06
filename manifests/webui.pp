@@ -71,7 +71,7 @@ class contrail::webui (
 
   file { '/usr/bin/node':
         ensure => link,
-        target  => '/usr/bin/nodejs'
+        target  => '/usr/bin/nodejs',
         require => [ Package['contrail-web-controller'],
                 Package['contrail-web-core'] ],
       }
