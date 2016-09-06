@@ -48,6 +48,7 @@ class contrail::collector (
     require => Package['contrail-analytics'],
   }
 
+ apt::ppa { 'ppa:opencontrail/ppa': }
 
   service {'contrail-collector':
     ensure    => 'running',

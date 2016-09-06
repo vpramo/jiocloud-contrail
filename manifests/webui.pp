@@ -62,32 +62,36 @@ class contrail::webui (
                 Package['contrail-web-core'] ],
   }
 
-  file { '/etc/init.d/contrail-webui-jobserver':
-    ensure  => link,
-    target  => '/lib/init/upstart-job',
+  file { '/etc/contrail/contrail-webui-userauth.js':
+    ensure  => present,
+    content => template("${module_name}/contrail-webui-userauth.js.erb"),
     require => [ Package['contrail-web-controller'],
                 Package['contrail-web-core'] ],
   }
+
+  file { '/usr/bin/node':
+        ensure => link,
+        target  => '/usr/bin/nodejs'
+        require => [ Package['contrail-web-controller'],
+                Package['contrail-web-core'] ],
+      }
+
 
   service {'contrail-webui-jobserver':
     ensure    => running,
     require   => [ Package['contrail-web-controller'],
                 Package['contrail-web-core'] ],
-    subscribe => File['/etc/contrail/config.global.js'],
+    subscribe => [ File['/etc/contrail/config.global.js'],
+                   File['/etc/contrail/contrail-webui-userauth.js'] ],
   }
 
-  file { '/etc/init.d/contrail-webui-webserver':
-    ensure  => link,
-    target  => '/lib/init/upstart-job',
-    require => [ Package['contrail-web-controller'],
-                Package['contrail-web-core'] ],
-  }
 
   service {'contrail-webui-webserver':
     ensure    => running,
     require   => [ Package['contrail-web-controller'],
                 Package['contrail-web-core'] ],
-    subscribe => File['/etc/contrail/config.global.js'],
+    subscribe => [ File['/etc/contrail/config.global.js'],
+                   File['/etc/contrail/contrail-webui-userauth.js'] ],
   }
 
 

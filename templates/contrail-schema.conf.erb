@@ -13,6 +13,7 @@ log_local=<%= @log_local %>
 cassandra_server_list=<%= @cassandra_ip_list.map{ |ip| "#{ip}:#{@cassandra_port}" }.join(' ') %>
 disc_server_ip=<%= @discovery_virtual_ip %>
 disc_server_port=<%= @discovery_server_port %>
+rabbit_server=<%= @rabbit_ip %>:<%= @rabbit_port %>
 
 [SECURITY]
 use_certs=<%= @use_certs %>
