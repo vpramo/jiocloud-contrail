@@ -13,6 +13,8 @@ class contrail::collector (
   $contrail_ip        = $::ipaddress,
   $collector_ip       = $::ipaddress,
   $config_ip          = $::ipaddress,
+  $zk_ip_list         = [$::ipaddress],
+  $zk_port            = 2181,
   $analytics_data_ttl = 48, ## Number of hours to keep the data
   $cassandra_ip_list  = [$::ipaddress],
   $redis_ip           = $::ipaddress,
@@ -67,4 +69,50 @@ class contrail::collector (
     enable    => true,
     subscribe => File['/etc/contrail/contrail-query-engine.conf'],
   }
+
+   file {'/etc/contrail/contrail-analytics-nodemgr.conf':
+     ensure => present,
+     content => template("${module_name}/contrail-nodemgr.conf.erb"),
+     require => Package['contrail-analytics']
+  }
+
+   service {'contrail-analytics-nodemgr':
+    ensure    => 'running',
+    enable    => true,
+    subscribe => File['/etc/contrail/contrail-analytics-nodemgr.conf'],
+  }
+
+    file {'/etc/contrail/contrail-analytics-nodemgr.conf':
+     ensure => present,
+     content => template("${module_name}/contrail-nodemgr.conf.erb"),
+     require => Package['contrail-analytics']
+  }
+
+   service {'contrail-snmp-collector':
+    ensure    => 'running',
+    enable    => true,
+    subscribe => File['/etc/contrail/contrail-snmp-collector.conf'],
+  }
+
+
+file {'/etc/contrail/contrail-snmp-collector.conf':
+     ensure => present,
+     content => template("${module_name}/contrail-snmp-collector.conf.erb"),
+     require => Package['contrail-analytics']
+  }
+
+
+  service {'contrail-topology':
+    ensure    => 'running',
+    enable    => true,
+    subscribe => File['/etc/contrail/contrail-topology.conf'],
+  }
+
+
+file {'/etc/contrail/contrail-topology.conf':
+     ensure => present,
+     content => template("${module_name}/contrail-topology.conf.erb"),
+     require => Package['contrail-analytics']
+  }  
 }
+

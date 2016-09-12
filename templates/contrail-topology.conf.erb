@@ -1,0 +1,6 @@
+[DEFAULTS]
+log_local=1
+log_level=SYS_NOTICE
+log_file=/var/log/contrail/contrail-topology.log
+zookeeper= <%= @zk_ip_list.map{ |ip| "#{ip}:#{@zk_port}" }.join(',') %>
+

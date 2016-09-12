@@ -363,6 +363,18 @@ class contrail::vrouter (
     hasstatus  => true,
     hasrestart => true,
   }
+ 
+ file {'/etc/contrail/contrail-vrouter-nodemgr.conf':
+     ensure => present,
+     content => template("${module_name}/contrail-nodemgr.conf.erb"),
+     require => Package['contrail-vrouter-agent']
+  }
+
+   service {'contrail-vrouter-nodemgr.conf':
+    ensure    => 'running',
+    enable    => true,
+    subscribe => File['/etc/contrail/contrail-vrouter-nodemgr.conf'],
+  }
 
   ##
   # Provision Contrail vrouter

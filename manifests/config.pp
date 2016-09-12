@@ -246,6 +246,14 @@ class contrail::config (
   }
 
   ##
+  # This is for contrail Node Manager
+  file {'/etc/contrail/contrail-config-nodemgr.conf':
+     ensure => present,
+     content => template("${module_name}/contrail-nodemgr.conf.erb"),
+     require => Package[$package_name]
+  }
+
+  ##
   ## Ensure ctrl-details file is present with right content.
   ##
   file { '/etc/contrail/ctrl-details' :
@@ -315,6 +323,12 @@ class contrail::config (
     ensure    => 'running',
     enable    => true,
     subscribe => File['/etc/contrail/contrail-schema.conf'],
+  }
+
+  service {'contrail-config-nodemgr':
+    ensure    => 'running',
+    enable    => true,
+    subscribe => File['/etc/contrail/contrail-config-nodemgr.conf'],
   }
 
   ##

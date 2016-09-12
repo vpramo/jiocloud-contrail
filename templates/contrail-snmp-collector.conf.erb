@@ -1,0 +1,14 @@
+[DEFAULTS]
+api_server=<%= @api_virtual_ip %>:8082
+
+
+zookeeper=<%= @zk_ip_list.map{ |ip| "#{ip}:#{@zk_port}" }.join(',') %>
+
+log_local=1
+log_level=SYS_NOTICE
+log_file=/var/log/contrail/contrail-snmp-collector.log
+
+[DISCOVERY]
+disc_server_ip=<%= @discovery_virtual_ip %>
+disc_server_port=5998
+
