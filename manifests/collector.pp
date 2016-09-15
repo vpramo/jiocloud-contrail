@@ -82,11 +82,6 @@ class contrail::collector (
     subscribe => File['/etc/contrail/contrail-analytics-nodemgr.conf'],
   }
 
-    file {'/etc/contrail/contrail-analytics-nodemgr.conf':
-     ensure => present,
-     content => template("${module_name}/contrail-nodemgr.conf.erb"),
-     require => Package['contrail-analytics']
-  }
 
    service {'contrail-snmp-collector':
     ensure    => 'running',
