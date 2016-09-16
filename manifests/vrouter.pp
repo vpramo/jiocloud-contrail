@@ -380,7 +380,7 @@ file {'/etc/contrail/contrail-vrouter-nodemgr.conf':
       require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
   }
 
- file {'/etc/contrail/supervisor_vrouter_files/contrail-vrouter-nodemgr.ini':
+ file {'/etc/contrail/supervisord_vrouter_files/contrail-vrouter-nodemgr.ini':
        ensure => present,
        source => "file:///usr/share/doc/contrail-vrouter-agent/examples/contrail-vrouter-nodemgr.ini",
          require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
