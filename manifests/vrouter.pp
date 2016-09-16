@@ -377,13 +377,13 @@ file {'/etc/contrail/contrail-vrouter-nodemgr.conf':
   file {'/etc/init.d/contrail-vrouter-nodemgr':
       ensure => present,
       source => "file:///etc/init.d/contrail-vrouter-agent",
-      require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
+      require => [Package['contrail-vrouter-agent'], Package['contrail-nodemgr']]
   }
 
  file {'/etc/contrail/supervisord_vrouter_files/contrail-vrouter-nodemgr.ini':
        ensure => present,
        source => "file:///usr/share/doc/contrail-vrouter-agent/examples/contrail-vrouter-nodemgr.ini",
-         require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
+         require => [Package['contrail-vrouter-agent'], Package['contrail-nodemgr']]
    }
 
    service {'contrail-vrouter-nodemgr.conf':
