@@ -265,7 +265,7 @@ class contrail::config (
 
  file {'/etc/contrail/supervisor_config_files/contrail-config-nodemgr.ini':
        ensure => present,
-       source => "file:///usr/share/doc/contrail-config/examples/contrail-config-nodemgr.ini',
+       source => "file:///usr/share/doc/contrail-config/examples/contrail-config-nodemgr.ini",
          require => [Package[$package_name], Package['contrail-nodemgr']]
    }
 

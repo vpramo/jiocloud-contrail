@@ -89,7 +89,7 @@ class contrail::collector (
 
  file {'/etc/contrail/supervisor_analytics_files/contrail-analytics-nodemgr.ini':
        ensure => present,
-       source => "file:///usr/share/doc/contrail-analytics/examples/contrail-analytics-nodemgr.ini',
+       source => "file:///usr/share/doc/contrail-analytics/examples/contrail-analytics-nodemgr.ini",
          require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
    }
 
