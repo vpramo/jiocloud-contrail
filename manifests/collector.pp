@@ -98,7 +98,7 @@ class contrail::collector (
     enable    => true,
     subscribe => [File['/etc/contrail/contrail-analytics-nodemgr.conf'],
                   File['/etc/init.d/contrail-analytics-nodemgr'],
-                  File['/etc/contrail/supervisor_analytics_files/contrail-analytics-nodemgr.ini']]
+                  File['/etc/contrail/supervisord_analytics_files/contrail-analytics-nodemgr.ini']]
   }
 
 

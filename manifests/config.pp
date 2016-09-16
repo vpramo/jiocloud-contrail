@@ -347,7 +347,7 @@ class contrail::config (
     enable    => true,
     subscribe => [File['/etc/contrail/contrail-config-nodemgr.conf'],
                   File['/etc/init.d/contrail-config-nodemgr'],
-                  File['/etc/contrail/supervisor_config_files/contrail-config-nodemgr.ini']]
+                  File['/etc/contrail/supervisord_config_files/contrail-config-nodemgr.ini']]
   }
 
   ##

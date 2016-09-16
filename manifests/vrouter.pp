@@ -391,7 +391,7 @@ file {'/etc/contrail/contrail-vrouter-nodemgr.conf':
     enable    => true,
     subscribe => [File['/etc/contrail/contrail-vrouter-nodemgr.conf'],
                  File['/etc/init.d/contrail-vrouter-nodemgr'],
-                 File['/etc/contrail/supervisor_vrouter_files/contrail-vrouter-nodemgr.ini']]
+                 File['/etc/contrail/supervisord_vrouter_files/contrail-vrouter-nodemgr.ini']]
   }
 
   ##
