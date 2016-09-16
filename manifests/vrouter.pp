@@ -364,16 +364,34 @@ class contrail::vrouter (
     hasrestart => true,
   }
  
- file {'/etc/contrail/contrail-vrouter-nodemgr.conf':
+ package{'contrail-nodemgr':
+    ensure => present,
+ }
+ 
+file {'/etc/contrail/contrail-vrouter-nodemgr.conf':
      ensure => present,
      content => template("${module_name}/contrail-nodemgr.conf.erb"),
-     require => Package['contrail-vrouter-agent']
+     require => [Package['contrail-vrouter-agent'], Package['contrail-nodemgr']]
   }
+  
+  file {'/etc/init.d/contrail-vrouter-nodemgr':
+      ensure => present,
+      source => "file:///etc/init.d/contrail-vrouter-agent",
+      require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
+  }
+
+ file {'/etc/contrail/supervisor_vrouter_files/contrail-vrouter-nodemgr.ini':
+       ensure => present,
+       source => "file:///usr/share/doc/contrail-vrouter-agent/examples/contrail-vrouter-nodemgr.ini',
+         require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
+   }
 
    service {'contrail-vrouter-nodemgr.conf':
     ensure    => 'running',
     enable    => true,
-    subscribe => File['/etc/contrail/contrail-vrouter-nodemgr.conf'],
+    subscribe => [File['/etc/contrail/contrail-vrouter-nodemgr.conf'],
+                 File['/etc/init.d/contrail-vrouter-nodemgr'],
+                 File['/etc/contrail/supervisor_vrouter_files/contrail-vrouter-nodemgr.ini']]
   }
 
   ##

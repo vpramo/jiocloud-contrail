@@ -245,13 +245,29 @@ class contrail::config (
     require => Package['contrail-utils'],
   }
 
+  package { 'contrail-nodemgr':
+       ensure => 'present',
+  }
+
   ##
   # This is for contrail Node Manager
   file {'/etc/contrail/contrail-config-nodemgr.conf':
      ensure => present,
      content => template("${module_name}/contrail-nodemgr.conf.erb"),
-     require => Package[$package_name]
+     require => [Package[$package_name], Package['contrail-nodemgr']]
   }
+
+  file {'/etc/init.d/contrail-config-nodemgr':
+      ensure => present,
+      source => "file:///etc/init.d/contrail-schema",
+      require => [Package[$package_name], Package['contrail-nodemgr']]
+  }
+
+ file {'/etc/contrail/supervisor_config_files/contrail-config-nodemgr.ini':
+       ensure => present,
+       source => "file:///usr/share/doc/contrail-config/examples/contrail-config-nodemgr.ini',
+         require => [Package[$package_name], Package['contrail-nodemgr']]
+   }
 
   ##
   ## Ensure ctrl-details file is present with right content.
@@ -275,6 +291,7 @@ class contrail::config (
   ##
   ## api_server.conf
   ##
+
 
   file { '/etc/contrail/contrail-api.conf' :
     ensure  => present,
@@ -328,7 +345,9 @@ class contrail::config (
   service {'contrail-config-nodemgr':
     ensure    => 'running',
     enable    => true,
-    subscribe => File['/etc/contrail/contrail-config-nodemgr.conf'],
+    subscribe => [File['/etc/contrail/contrail-config-nodemgr.conf'],
+                  File['/etc/init.d/contrail-config-nodemgr'],
+                  File['/etc/contrail/supervisor_config_files/contrail-config-nodemgr.ini']]
   }
 
   ##

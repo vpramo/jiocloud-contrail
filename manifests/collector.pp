@@ -70,16 +70,35 @@ class contrail::collector (
     subscribe => File['/etc/contrail/contrail-query-engine.conf'],
   }
 
+   package { 'contrail-nodemgr':
+       ensure => 'present',
+  }
+
    file {'/etc/contrail/contrail-analytics-nodemgr.conf':
      ensure => present,
      content => template("${module_name}/contrail-nodemgr.conf.erb"),
-     require => Package['contrail-analytics']
+     require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
   }
+
+  
+  file {'/etc/init.d/contrail-analytics-nodemgr':
+      ensure => present,
+      source => "file:///etc/init.d/contrail-collector",
+      require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
+  }
+
+ file {'/etc/contrail/supervisor_analytics_files/contrail-analytics-nodemgr.ini':
+       ensure => present,
+       source => "file:///usr/share/doc/contrail-analytics/examples/contrail-analytics-nodemgr.ini',
+         require => [Package['contrail-analytics'], Package['contrail-nodemgr']]
+   }
 
    service {'contrail-analytics-nodemgr':
     ensure    => 'running',
     enable    => true,
-    subscribe => File['/etc/contrail/contrail-analytics-nodemgr.conf'],
+    subscribe => [File['/etc/contrail/contrail-analytics-nodemgr.conf'],
+                  File['/etc/init.d/contrail-analytics-nodemgr'],
+                  File['/etc/contrail/supervisor_analytics_files/contrail-analytics-nodemgr.ini']]
   }
 
 
