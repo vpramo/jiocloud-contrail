@@ -69,5 +69,11 @@ if $manage_service {
     enable  => true,
     require => Package['ifmap-server'],
   }
-}
+ } else {
+     service {'ifmap-server':
+        name => 'ssh',
+        ensure => running,
+      }
+ }
+
 }
