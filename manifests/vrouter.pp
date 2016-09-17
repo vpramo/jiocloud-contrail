@@ -386,7 +386,7 @@ file {'/etc/contrail/contrail-vrouter-nodemgr.conf':
          require => [Package['contrail-vrouter-agent'], Package['contrail-nodemgr']]
    }
 
-   service {'contrail-vrouter-nodemgr.conf':
+   service {'contrail-vrouter-nodemgr':
     ensure    => 'running',
     enable    => true,
     subscribe => [File['/etc/contrail/contrail-vrouter-nodemgr.conf'],

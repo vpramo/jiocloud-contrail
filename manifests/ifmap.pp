@@ -6,7 +6,8 @@
 class contrail::ifmap (
   $package_ensure  = 'present',
   $control_ip_list = [$::ipaddress],
-  $log_level       = 'INFO'
+  $log_level       = 'INFO',
+  $manage_service = false,
 ) {
 
   ##
@@ -62,10 +63,11 @@ class contrail::ifmap (
     content => template("${module_name}/ifmap-log4j.properties.erb"),
     notify  => Service['ifmap-server'],
   }
-
+if $manage_service {
   service {'ifmap-server':
     ensure  => running,
     enable  => true,
     require => Package['ifmap-server'],
   }
+}
 }
