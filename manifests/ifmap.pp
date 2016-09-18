@@ -71,8 +71,7 @@ if $manage_service {
   }
  } else {
      service {'ifmap-server':
-        name => 'ssh',
-        ensure => running,
+        ensure => 'stopped',
       }
  }
 
