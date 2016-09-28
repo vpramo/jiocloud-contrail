@@ -6,7 +6,7 @@
 
 [DEFAULT]
  analytics_data_ttl=<%= @analytics_data_ttl %>
- cassandra_server_list=<%= @cassandra_ip_list.map{ |ip| "#{ip}:#{@cassandra_port}" }.join(',') %>
+ cassandra_server_list=<%= @cassandra_ip_list.map{ |ip| "#{ip}:#{@cassandra_port}" }.join(' ') %>
   collectors=127.0.0.1:8086
   hostip=<%= @contrail_ip %> # Resolved IP of `hostname`
 # hostname= # Retrieved as `hostname`

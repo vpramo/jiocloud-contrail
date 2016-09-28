@@ -18,7 +18,7 @@ class contrail::collector (
   $analytics_data_ttl = 48, ## Number of hours to keep the data
   $cassandra_ip_list  = [$::ipaddress],
   $redis_ip           = $::ipaddress,
-  $cassandra_port     = 9160,
+  $cassandra_port     = 9042,
   $log_level          = 'SYS_CRIT',
   $log_file_size      = '10737418240',
   $log_local          = 1,
