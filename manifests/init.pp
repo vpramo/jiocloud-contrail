@@ -618,7 +618,7 @@ class contrail (
       analytics_data_ttl   => $analytics_data_ttl,
       cassandra_ip_list    => $cassandra_ip_list_orig,
       redis_ip             => $redis_ip_orig,
-      cassandra_port       => $cassandra_port,
+      cassandra_port       => '9042',
     }
 
     Anchor['contrail::end_base_services'] ->
