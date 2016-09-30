@@ -1,0 +1,18 @@
+[DEFAULTS]
+#host_ip = 127.0.0.1
+collectors = <%= @collector_ip %>:8086
+#http_server_port = 5995
+log_local = 1
+log_level = SYS_NOTICE
+#log_category = 
+log_file = /var/log/contrail/contrail-alarm-gen.log
+kafka_broker_list =  <%= @kafka_ip_list.map{ |ip| "#{ip}:#{@kafka_port}" }.join(' ') %>
+partitions=30
+zk_list = <%= @zk_ip_list.map{ |ip| "#{ip}:#{@zk_port}" }.join(',') %>
+
+[DISCOVERY]
+disc_server_ip = <%= @discovery_virtual_ip %>
+disc_server_port = 5998
+
+[REDIS]
+redis_server_port=6379

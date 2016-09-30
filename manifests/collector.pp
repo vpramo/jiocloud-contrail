@@ -15,6 +15,8 @@ class contrail::collector (
   $config_ip          = $::ipaddress,
   $zk_ip_list         = [$::ipaddress],
   $zk_port            = 2181,
+  $kafka_ip           = '127.0.0.1',
+  $kafka_port         = 9092,
   $analytics_data_ttl = 48, ## Number of hours to keep the data
   $cassandra_ip_list  = [$::ipaddress],
   $redis_ip           = $::ipaddress,
@@ -64,6 +66,13 @@ class contrail::collector (
     require => Package['contrail-analytics'],
   }
 
+ file { '/etc/contrail/contrail-alarm-gen.conf':
+    ensure  => present,
+    content => template("${module_name}/contrail-alarm-gen.conf.erb"),
+    require => Package['contrail-analytics'],
+  }
+
+
   service {'contrail-query-engine':
     ensure    => 'running',
     enable    => true,
@@ -107,6 +116,13 @@ class contrail::collector (
     enable    => true,
     subscribe => File['/etc/contrail/contrail-snmp-collector.conf'],
   }
+
+ service {'contrail-alarm-gen':
+    ensure    => 'running',
+    enable    => true,
+    subscribe => File['/etc/contrail/contrail-alarm-gen.conf'],
+ }
+
 
 
 file {'/etc/contrail/contrail-snmp-collector.conf':

@@ -54,6 +54,7 @@ class contrail::ifmap (
     ensure  => present,
     require => Package['ifmap-server'],
     source  => "puppet:///modules/${module_name}/publisher.properties",
+    mode => '0777',
     notify  => Service['ifmap-server'],
   }
 
