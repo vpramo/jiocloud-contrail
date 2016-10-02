@@ -15,7 +15,7 @@ class contrail::collector (
   $config_ip          = $::ipaddress,
   $zk_ip_list         = [$::ipaddress],
   $zk_port            = 2181,
-  $kafka_ip           = '127.0.0.1',
+  $kafka_ip_list      = ['127.0.0.1'],
   $kafka_port         = 9092,
   $analytics_data_ttl = 48, ## Number of hours to keep the data
   $cassandra_ip_list  = [$::ipaddress],
@@ -144,5 +144,16 @@ file {'/etc/contrail/contrail-topology.conf':
      content => template("${module_name}/contrail-topology.conf.erb"),
      require => Package['contrail-analytics']
   }  
+
+
+   contrail_database {$::hostname:
+    ensure         => present,
+    host_address   => $contrail_ip,
+    admin_tenant   => $keystone_admin_tenant,
+    admin_user     => $keystone_admin_user,
+    admin_password => $keystone_admin_password,
+    api_server_address  => $api_virtual_ip,
+    require        => Service['contrail-api'],
+  }
 }
 

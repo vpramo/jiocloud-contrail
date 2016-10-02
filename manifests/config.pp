@@ -400,6 +400,30 @@ class contrail::config (
   }
 
 
+ contrail_config {$::hostname:
+    ensure         => present,
+    host_address   => $contrail_ip,
+    admin_tenant   => $keystone_admin_tenant,
+    admin_user     => $keystone_admin_user,
+    admin_password => $keystone_admin_password,
+    api_server_address  => $api_virtual_ip,
+    require        => Service['contrail-api'],
+  }
+
+
+   contrail_database {$::hostname:
+    ensure         => present,
+    host_address   => $contrail_ip,
+    admin_tenant   => $keystone_admin_tenant,
+    admin_user     => $keystone_admin_user,
+    admin_password => $keystone_admin_password,
+    api_server_address  => $api_virtual_ip,
+    require        => Service['contrail-api'],
+  }
+
+
+ 
+
   if $seed {
     ##
     # Provision edge routers. This is only need to be run on leader.
