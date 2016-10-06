@@ -146,14 +146,5 @@ file {'/etc/contrail/contrail-topology.conf':
   }  
 
 
-   contrail_database {$::hostname:
-    ensure         => present,
-    host_address   => $contrail_ip,
-    admin_tenant   => $keystone_admin_tenant,
-    admin_user     => $keystone_admin_user,
-    admin_password => $keystone_admin_password,
-    api_server_address  => $api_virtual_ip,
-    require        => Service['contrail-api'],
-  }
 }
 
