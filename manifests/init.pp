@@ -613,7 +613,7 @@ class contrail (
       config_ip            => $config_ip_orig,
       api_virtual_ip       => $api_virtual_ip,
       discovery_virtual_ip => $discovery_virtual_ip,
-      zk_ip_list           => $zk_ip_list,
+      zk_ip_list           => $zk_ip_list_orig,
       zk_port              => $zk_port,
       analytics_data_ttl   => $analytics_data_ttl,
       cassandra_ip_list    => $cassandra_ip_list_orig,

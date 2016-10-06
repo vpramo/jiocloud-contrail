@@ -12,7 +12,6 @@ Puppet::Type.type(:contrail_config).provide(
   end
 
   def exists?
-     !getObject(getUrl,resource[:name]).empty?
   end
 
   def create
