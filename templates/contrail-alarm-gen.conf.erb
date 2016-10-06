@@ -7,7 +7,6 @@ log_level = SYS_NOTICE
 #log_category = 
 log_file = /var/log/contrail/contrail-alarm-gen.log
 kafka_broker_list =  <%= @kafka_ip_list.map{ |ip| "#{ip}:#{@kafka_port}" }.join(' ') %>
-partitions=30
 zk_list = <%= @zk_ip_list.map{ |ip| "#{ip}:#{@zk_port}" }.join(',') %>
 
 [DISCOVERY]

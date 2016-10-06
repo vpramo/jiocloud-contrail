@@ -33,6 +33,9 @@ class contrail::collector (
     ensure => $package_ensure,
   }
 
+  package {'contrail-utils':
+    ensure => $package_ensure,
+  }
   ##
   ## Ensure contrail-analytics-api.conf file is present with right content.
   ##
