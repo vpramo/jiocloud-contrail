@@ -386,11 +386,18 @@ file {'/etc/contrail/contrail-vrouter-nodemgr.conf':
          require => [Package['contrail-vrouter-agent'], Package['contrail-nodemgr']]
    }
 
+ file {'/etc/contrail/supervisord_vrouter_files/contrail-vrouter.rules':
+       ensure => present,
+       source => "puppet:///modules/${module_name}/contrail-vrouter.rules",
+         require => [Package['contrail-vrouter-agent'], Package['contrail-nodemgr']]
+   }
+
    service {'contrail-vrouter-nodemgr':
     ensure    => 'running',
     enable    => true,
     subscribe => [File['/etc/contrail/contrail-vrouter-nodemgr.conf'],
                  File['/etc/init.d/contrail-vrouter-nodemgr'],
+                 File['/etc/contrail/supervisord_vrouter_files/contrail-vrouter.rules'],
                  File['/etc/contrail/supervisord_vrouter_files/contrail-vrouter-nodemgr.ini']]
   }
 
