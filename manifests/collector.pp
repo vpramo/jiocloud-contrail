@@ -13,6 +13,9 @@ class contrail::collector (
   $contrail_ip        = $::ipaddress,
   $collector_ip       = $::ipaddress,
   $config_ip          = $::ipaddress,
+  $keystone_admin_tenant= 'openstack',
+  $keystone_admin_user=  'admin',
+  $keystone_admin_password= 'Chang3M3',
   $zk_ip_list         = [$::ipaddress],
   $zk_port            = 2181,
   $kafka_ip_list      = ['127.0.0.1'],
@@ -145,6 +148,15 @@ file {'/etc/contrail/contrail-topology.conf':
      require => Package['contrail-analytics']
   }  
 
+   contrail_analytics {$::hostname:
+    ensure         => present,
+    host_address   => $contrail_ip,
+    admin_tenant   => $keystone_admin_tenant,
+    admin_user     => $keystone_admin_user,
+    admin_password => $keystone_admin_password,
+    api_server_address  => $api_virtual_ip,
+    require        => Service['contrail-analytics-api'],
+  }
 
 }
 
