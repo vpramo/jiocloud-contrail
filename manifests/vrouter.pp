@@ -59,6 +59,8 @@
 # [*debug*]
 #  Enable/disable debug logging.
 #
+# [*slash_31]
+# When the IP address is a /31 subnet , the the network becomes the gateway valid in packethosting
 
 class contrail::vrouter (
   $discovery_address,
@@ -73,6 +75,7 @@ class contrail::vrouter (
   $manage_repo                = false,
   $vrouter_interface          = 'vhost0',
   $vrouter_physical_interface = 'eth0',
+  $slash_31                   = 'false',
   $interface_is_dhcp          = 'true',
   $vrouter_num_controllers    = 2,
   $vrouter_gw                 = undef,
@@ -163,7 +166,11 @@ class contrail::vrouter (
   if $vrouter_gw {
     $vrouter_gw_orig = $vrouter_gw
   } else {
+    if $slash_31 {
+      $vrouter_gw_orig = inline_template("<%= scope.lookupvar('network_' + @iface_for_vrouter_config) %>")
+    } else {
     $vrouter_gw_orig = nextip(inline_template("<%= scope.lookupvar('network_' + @iface_for_vrouter_config) %>"))
+    }
   }
 
   package { 'ufw':
