@@ -258,6 +258,10 @@ class contrail::vrouter (
       command => "/sbin/ifup ${vrouter_interface}",
       unless  => "/sbin/ifconfig | grep ^${vrouter_interface}",
       require => Package[$package_names],
+    } ->
+    exec { "remove_default_route":
+       command => "/sbin/route del default gw ${vrouter_gw_orig} ${vrouter_physical_interface}",
+       require => Package[$package_names]
     }
   }
 
