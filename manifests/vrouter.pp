@@ -261,6 +261,7 @@ class contrail::vrouter (
     } ->
     exec { "remove_default_route":
        command => "/sbin/route del default gw ${vrouter_gw_orig} ${vrouter_physical_interface}",
+       onlyif => "route -n | grep ${vrouter_gw_orig} | grep ${vrouter_physical_interface}",
        require => Package[$package_names]
     }
   }
