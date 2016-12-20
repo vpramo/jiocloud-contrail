@@ -75,7 +75,7 @@ class contrail::vrouter (
   $manage_repo                = false,
   $vrouter_interface          = 'vhost0',
   $vrouter_physical_interface = 'eth0',
-  $slash_31                   = 'false',
+  $slash_31                   = false,
   $interface_is_dhcp          = 'true',
   $vrouter_num_controllers    = 2,
   $vrouter_gw                 = undef,
